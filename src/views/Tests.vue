@@ -10,7 +10,7 @@
     <div v-if="loaded">
         <v-row v-for="test in testsArray" :key="test.id">
             <v-col>
-                <div class="test-wrapper">
+                <div class="test-wrapper" @click="openTest(test.id)">
                     <div class="test-image" :style="{background: 'url(\''+http+test.TestMedia[0].formats.small.url+'\') no-repeat center center /  cover'}" ></div>
                     <div class="test-text-wrapper">
                         <div class="test-header">
@@ -60,6 +60,17 @@ export default {
             .then(response => {this.testsArray = response.data});
             
             
+    },
+    methods:{
+        openTest(id){
+            this.$router.push({
+                name: 'Test',
+                params: {
+                    tests: this.testsArray,
+                    id: id
+                }
+            })
+        }
     }
 }
 </script>

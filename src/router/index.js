@@ -4,6 +4,8 @@ const Home    = () => import('../views/Home.vue')
 const Top     = () => import('../views/Top.vue')
 const Profile = () => import('../views/Profile.vue')
 const Tests   = () => import('../views/Tests.vue')
+const Test   = () => import('../views/Test.vue')
+const Questions = () => import('../views/Questions.vue')
 
 
 Vue.use(VueRouter)
@@ -29,7 +31,20 @@ const routes = [
     name: 'Profile',
     component: Profile
   },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
+    props: true
+  },
+  {
+    path: '/questions',
+    name: 'Questions',
+    component: Questions,
+    props: true
+  },
 ]
+
 
 const router = new VueRouter({
   mode: 'history',
