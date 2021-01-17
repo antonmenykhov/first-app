@@ -8,16 +8,16 @@
         </v-row>
     </div>
     <div v-if="loaded">
-        <v-row v-for="n in tests" :key="n">
+        <v-row v-for="test in testsArray" :key="test.id">
             <v-col>
                 <div class="test-wrapper">
-                    <div class="test-image"></div>
+                    <div class="test-image" :style="{background: 'url(\''+http+test.TestMedia[0].formats.small.url+'\') no-repeat center center /  cover'}" ></div>
                     <div class="test-text-wrapper">
                         <div class="test-header">
-                            Это первый тест
+                            {{test.TestName}}
                         </div>
                         <div class="test-decription">
-                            Это описание первого теста. Это описание первого теста. Это описание первого теста
+                            {{test.TestDescription}}
                         </div>
                     </div>
                 </div>
@@ -28,16 +28,19 @@
 </template>
 
 <script>
+import api from '../constants';
+import axios from 'axios'
 export default {
     data() {
         return {
             loaded: false,
-            tests: 5,
+            testsArray: [],
             attrs: {
                 class: 'mb-6',
 
                 elevation: 2,
             },
+            http: api.http
         }
     },
     created() {
@@ -52,6 +55,12 @@ export default {
 
         readyHandler(); // in case the component has been instantiated lately after loading
     },
+    mounted(){
+        axios.get(api.tests)
+            .then(response => {this.testsArray = response.data});
+            
+            
+    }
 }
 </script>
 
@@ -64,7 +73,7 @@ export default {
 
 .test-image {
     height: 200px;
-    background: url('https://million-wallpapers.ru/wallpapers/0/55/452112202626022.jpg') no-repeat center center /cover;
+    
 
 }
 
