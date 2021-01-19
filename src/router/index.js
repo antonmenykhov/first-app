@@ -6,6 +6,7 @@ const Profile = () => import('../views/Profile.vue')
 const Tests   = () => import('../views/Tests.vue')
 const Test   = () => import('../views/Test.vue')
 const Questions = () => import('../views/Questions.vue')
+const FinishTest = () => import('../views/FinishTest.vue')
 
 
 Vue.use(VueRouter)
@@ -41,6 +42,12 @@ const routes = [
     path: '/questions',
     name: 'Questions',
     component: Questions,
+    props: true
+  },
+  {
+    path: '/finishtest',
+    name: 'FinishTest',
+    component: FinishTest,
     props: true
   },
 ]

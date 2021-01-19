@@ -4,7 +4,7 @@ const tests = http+'/tests?_where[StartDate_lte]=' +currentData + '&_where[EndDa
 const test = http+'/test/';
 const auth  = http+'/auth/local';
 const register = http+'/auth/local/register';
-const checkAnswers = http+'/check/';
+const checkanswers = http+'/check/';
 export default{
-    http, tests, test, auth, register, checkAnswers
+    http, tests, test, auth, register, checkanswers
 }

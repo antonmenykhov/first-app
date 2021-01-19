@@ -8,18 +8,18 @@
                         <p class="question-text">{{question.Vopros}}</p>
                         <div class="answers">
                             <div class="buttons-holder first-line">
-                                <v-btn class="ma-2"  color="grey">
+                                <v-btn class="ma-2" color="grey" @click="setAnswer(index, 'var1')">
                                     {{question.var1}}
                                 </v-btn>
-                                <v-btn class="ma-2"  color="grey">
+                                <v-btn class="ma-2" color="grey" @click="setAnswer(index, 'var2')">
                                     {{question.var2}}
                                 </v-btn>
                             </div>
                             <div class="buttons-holder second-line">
-                                <v-btn class="ma-2"  color="grey">
+                                <v-btn class="ma-2" color="grey" @click="setAnswer(index, 'var3')">
                                     {{question.var3}}
                                 </v-btn>
-                                <v-btn class="ma-2"  color="grey">
+                                <v-btn class="ma-2" color="grey" @click="setAnswer(index, 'var4')">
                                     {{question.var4}}
                                 </v-btn>
                             </div>
@@ -27,11 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="buttons-holder tests-buttons">
-                    <v-btn v-show="0!=currentNumber" v-on:click="prevQ">Назад</v-btn>
-                    <v-btn color="primary" v-show="(currentNumber+1)!=qNumber" v-on:click="nextQ">Следующий вопрос</v-btn>
-                    <v-btn color="primary" v-show="qNumber===(currentNumber+1)" v-on:click="finishTest">Закончить</v-btn>
-                </div>
+
             </v-col>
         </v-row>
     </v-container>
@@ -47,23 +43,20 @@ export default {
             qNumber: this.testQuestions.length,
             currentNumber: 0,
             answers: [],
-            
 
         }
     },
     methods: {
-        nextQ() {
-            this.currentNumber++
-        },
-        prevQ() {
-            this.currentNumber--
-        },
+
         setAnswer(qId, aId) {
-            this.answers[qId] = aId
+            this.answers[qId] = aId;
+            if (this.currentNumber+1 != this.qNumber) {
+                this.currentNumber++
+            } else {
+                this.$router.push({ name: 'FinishTest', params: { answers: this.answers, qNumber: this.qNumber, testId: this.id }})
+
+            }
         },
-        finishTest() {
-            this.$router.push({ name: 'FinishTest', params: { answers: this.answers, qNumber: this.qNumber, testId: this.testData.id } })
-        }
 
     },
 }
@@ -84,18 +77,22 @@ export default {
     font-size: 20px;
     text-align: center;
 }
-.answers{
+
+.answers {
     position: absolute;
     bottom: 50px;
     width: 95vw;
 }
-.answers button{
-    min-width: 40vw!important;
+
+.answers button {
+    min-width: 40vw !important;
 }
-.first-line{
-    padding-bottom: 0px!important;
+
+.first-line {
+    padding-bottom: 0px !important;
 }
-.second-line{
-    padding-top: 0px!important
+
+.second-line {
+    padding-top: 0px !important
 }
 </style>
