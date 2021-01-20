@@ -7,7 +7,7 @@
         <div class="profile-wrapper">
             <div class="avatar-name">
                 <v-avatar>
-                    <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+                    <img :src="http+avatar">
                 </v-avatar>
                 <v-text-field style="padding: 0 16px " :disabled="!isEditing" label="Имя" v-model="username"></v-text-field>
                 <v-btn color="teal " fab small @click="edit">
@@ -47,21 +47,27 @@
 </template>
 
 <script>
+import api from '../constants'
+import axios from 'axios'
 export default {
 
     data() {
         return {
+            http: api.http,
+            userdata: null,
+            token: localStorage.getItem('token'),
             snackbar: false,
             isEditing: false,
-            username: 'Вася Пупкин',
+            username: 'Вася',
             city: 'Tyumen',
-            birthday: new Date().toISOString().substr(0, 10),
+            birthday: null,
             mail: 'vasya@mail.ru',
             phone: '88005553535',
             about: 'I am vasya!',
             raiting: 100,
             loaded: false,
             tests: 5,
+            avatar: null,
             attrs: {
                 class: 'mb-6',
 
@@ -76,6 +82,17 @@ export default {
 
         },
         saveInfo() {
+            axios.post(api.updateuserinfo, {
+                username: this.username,
+                email: this.mail,
+                city: this.city,
+                birthday: this.birthday,
+                phone: this.phone,
+                about: this.about,
+                }, 
+                {headers: {
+                Authorization: `Bearer ${this.token}`
+            }})
             this.snackbar = true,
                 setTimeout(() => { this.snackbar = false }, 1000)
         }
@@ -92,6 +109,23 @@ export default {
 
         readyHandler(); // in case the component has been instantiated lately after loading
     },
+    mounted() {
+        axios.post(api.me, null, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
+        }).then(respone => {this.userdata = respone.data;
+        this.username=this.userdata.username;
+        this.city=this.userdata.city;
+        this.birthday=this.userdata.birthday;
+        this.mail=this.userdata.email;
+        this.phone=this.userdata.phone;
+        this.about=this.userdata.about;
+        this.raiting=this.userdata.raiting;
+        this.avatar=this.userdata.avatar.formats.small.url;
+        }).catch(error => { console.log(error);
+            this.$router.push({ path: '/' }) })
+    }
 
 }
 </script>

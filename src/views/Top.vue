@@ -6,21 +6,21 @@
     </div>
     <div v-if="loaded">
         <v-list>
-            <v-list-item v-for="chat in recent" :key="chat.title">
+            <v-list-item v-for="(user, index) in usertop" :key="user.id">
                 <v-list-item-icon class="top-position">
           <v-icon
             class="top-position-text"
             
           >
-            1
+            {{index+1}}
           </v-icon>
         </v-list-item-icon>
                 <v-list-item-avatar class="top-avatar">
-                    <v-img :alt="`${chat.title} avatar`" :src="chat.avatar" ></v-img>
+                    <v-img :alt="`${user.username} avatar`" :src="http+user.avatar.formats.small.url" ></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title v-text="chat.title"></v-list-item-title>
+                    <v-list-item-title v-text="user.username"></v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-icon>
@@ -28,7 +28,7 @@
             
             color="brown"
           >
-            500
+            {{user.raiting}}
           </v-icon>
         </v-list-item-icon>
             </v-list-item>
@@ -38,33 +38,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+import api from '../constants'
 export default {
     data() {
         return {
+            http: api.http,
             loaded: false,
-            recent: [{
-                    active: true,
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    title: 'Jason Oner',
-                },
-                {
-                    active: true,
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    title: 'Mike Carlson',
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    title: 'Cindy Baker',
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    title: 'Ali Connors',
-                },
-            ],
-            previous: [{
-                title: 'Travis Howard',
-                avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-            }],
+            usertop: null,
+            token: localStorage.getItem('token')
         }
     },
     created() {
@@ -78,6 +60,11 @@ export default {
         document.addEventListener('readystatechange', readyHandler);
 
         readyHandler(); // in case the component has been instantiated lately after loading
+    },
+    mounted() {
+        axios.post(api.gettop, null, {headers:{
+            Authorization: `Bearer ${this.token}`
+        }}).then(response=> this.usertop=response.data)
     },
 }
 </script>

@@ -5,6 +5,9 @@ const test = http+'/test/';
 const auth  = http+'/auth/local';
 const register = http+'/auth/local/register';
 const checkanswers = http+'/check/';
+const me = http+'/me/'
+const updateuserinfo = http+'/updateuserinfo/'
+const gettop = http+'/gettop/'
 export default{
-    http, tests, test, auth, register, checkanswers
+    http, tests, test, auth, register, checkanswers, me,updateuserinfo, gettop
 }
