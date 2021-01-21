@@ -8,6 +8,7 @@ const checkanswers = http+'/check/';
 const me = http+'/me/'
 const updateuserinfo = http+'/updateuserinfo/'
 const gettop = http+'/gettop/'
+const gettests = http+'/gettests/'
 export default{
-    http, tests, test, auth, register, checkanswers, me,updateuserinfo, gettop
+    http, tests, test, auth, register, checkanswers, me,updateuserinfo, gettop, gettests
 }

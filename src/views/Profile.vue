@@ -7,7 +7,8 @@
         <div class="profile-wrapper">
             <div class="avatar-name">
                 <v-avatar>
-                    <img :src="http+avatar">
+                    <img v-if="avatar" :src="http+avatar">
+                    <img v-if="!avatar" src="https://st.depositphotos.com/1779253/5140/v/600/depositphotos_51405259-stock-illustration-male-avatar-profile-picture-use.jpg">
                 </v-avatar>
                 <v-text-field style="padding: 0 16px " :disabled="!isEditing" label="Имя" v-model="username"></v-text-field>
                 <v-btn color="teal " fab small @click="edit">
@@ -122,7 +123,8 @@ export default {
         this.phone=this.userdata.phone;
         this.about=this.userdata.about;
         this.raiting=this.userdata.raiting;
-        this.avatar=this.userdata.avatar.formats.small.url;
+        if (this.userdata.avatar != null){
+        this.avatar=this.userdata.avatar.formats.small.url;} else {this.avatar=null;}
         }).catch(error => { console.log(error);
             this.$router.push({ path: '/' }) })
     }

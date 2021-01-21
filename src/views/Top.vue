@@ -16,7 +16,8 @@
           </v-icon>
         </v-list-item-icon>
                 <v-list-item-avatar class="top-avatar">
-                    <v-img :alt="`${user.username} avatar`" :src="http+user.avatar.formats.small.url" ></v-img>
+                    <v-img v-if="user.avatar" :alt="`${user.username} avatar`" :src="http+user.avatar.formats.small.url" ></v-img>
+                    <v-img v-if="user.avatar===null" :alt="`${user.username} avatar`" :src="defaultAva" ></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -46,7 +47,8 @@ export default {
             http: api.http,
             loaded: false,
             usertop: null,
-            token: localStorage.getItem('token')
+            token: localStorage.getItem('token'),
+            defaultAva: 'https://st.depositphotos.com/1779253/5140/v/600/depositphotos_51405259-stock-illustration-male-avatar-profile-picture-use.jpg'
         }
     },
     created() {
@@ -64,7 +66,8 @@ export default {
     mounted() {
         axios.post(api.gettop, null, {headers:{
             Authorization: `Bearer ${this.token}`
-        }}).then(response=> this.usertop=response.data)
+        }}).then(response=> this.usertop=response.data).catch(error => {console.log(error); this.$router.push({path:'/'})})
+       
     },
 }
 </script>

@@ -29,6 +29,12 @@
         </v-btn>
 
     </v-form>
+    <v-snackbar :timeout="1000" :value="emailTaken" color="blue-grey" content-class="snack-center" rounded="pill" bottom>
+                Такой e-mail уже используется
+            </v-snackbar>
+            <v-snackbar :timeout="1000" :value="invalidPass" color="blue-grey" content-class="snack-center" rounded="pill" bottom>
+                Неправильное имя пользователя или пароль
+            </v-snackbar>
 </v-container>
 </template>
 
@@ -39,6 +45,8 @@ export default {
 
     name: 'Home',
     data: () => ({
+        emailTaken: false,
+        invalidPass: false,
         registred: true,
         valid: true,
         name: '',
@@ -83,6 +91,8 @@ export default {
                     .catch(error => {
                         // Handle error.
                         console.log('An error occurred:', error.response);
+                        this.invalidPass=true;
+                        setTimeout(() => (this.invalidPass=false), 1500)
                     });
             }
         },
@@ -103,6 +113,8 @@ export default {
                     .catch(error => {
                         // Handle error.
                         console.log('An error occurred:', error.response);
+                        this.emailTaken=true;
+                        setTimeout(() => {this.emailTaken=false}, 1500)
                     });
 
             }

@@ -19,6 +19,7 @@ export default {
     data() {
         return {
             result: null,
+            token: localStorage.getItem('token')
         }
     },
     props: { answers: Array, qNumber: null, testId: null },
@@ -28,7 +29,11 @@ export default {
         }
     },
     mounted() {
-        axios.post(api.checkanswers, { testid: this.testId, answers: this.answers })
+        axios.post(api.checkanswers, 
+        { testid: this.testId, answers: this.answers }, 
+        {headers:{
+            Authorization: `Bearer ${this.token}`
+        }})
             .then(response => { this.result = response.data })
             .catch(console.error())
 
