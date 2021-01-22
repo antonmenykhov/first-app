@@ -29,10 +29,11 @@ export default {
         }
     },
     mounted() {
+        this.$store.commit('changeTitle', 'Готово!');
         axios.post(api.checkanswers, 
         { testid: this.testId, answers: this.answers }, 
         {headers:{
-            Authorization: `Bearer ${this.token}`
+            Authorization: `Bearer ${this.$store.state.jwt}`
         }})
             .then(response => { this.result = response.data })
             .catch(console.error())

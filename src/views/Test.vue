@@ -49,6 +49,8 @@ export default {
         }
     },
     mounted() {
+        this.$store.commit('changeTitle', 'Тест');
+        this.$store.commit('changeColor', 'indigo');
         this.test = this.tests.find(test => test.id === this.id)
     },
 }

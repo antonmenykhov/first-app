@@ -49,6 +49,7 @@ export default {
     methods: {
 
         setAnswer(qId, aId) {
+            this.$store.commit('changeTitle', 'Вопрос');
             this.answers[qId] = aId;
             if (this.currentNumber+1 != this.qNumber) {
                 this.currentNumber++
@@ -59,6 +60,10 @@ export default {
         },
 
     },
+    mounted(){
+         this.$store.commit('changeMenuDisabled', true);
+        
+    }
 }
 </script>
 

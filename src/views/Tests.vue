@@ -65,8 +65,12 @@ export default {
         readyHandler(); // in case the component has been instantiated lately after loading
     },
     mounted(){
+         this.$store.commit('changeMenuDisabled', false);
+        this.$store.commit('changeCurrentMenu', 0)
+        this.$store.commit('changeTitle', 'Тесты');
+        this.$store.commit('changeColor', 'blue-grey');
         axios.post(api.gettests, '', {headers:{
-            Authorization: `Bearer ${this.token}`
+            Authorization: `Bearer ${this.$store.state.jwt}`
         }})
             .then(response => {this.testsArray = response.data}).catch(error => { console.log(error);
             this.$router.push({ path: '/' }) });

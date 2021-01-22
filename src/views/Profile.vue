@@ -7,9 +7,13 @@
         <div class="profile-wrapper">
             <div class="avatar-name">
                 <v-avatar>
-                    <img v-if="avatar" :src="http+avatar">
-                    <img v-if="!avatar" src="https://st.depositphotos.com/1779253/5140/v/600/depositphotos_51405259-stock-illustration-male-avatar-profile-picture-use.jpg">
+
+                    <img :src="avatar">
+
+                   
+                    <v-file-input id="avatar-input" @change="uploadImage" v-show="isEditing" accept="image/png, image/jpeg, image/bmp" prepend-icon="mdi-camera" class="input-avatar"></v-file-input>
                 </v-avatar>
+
                 <v-text-field style="padding: 0 16px " :disabled="!isEditing" label="Имя" v-model="username"></v-text-field>
                 <v-btn color="teal " fab small @click="edit">
                     <v-icon v-if="isEditing">
@@ -68,7 +72,7 @@ export default {
             raiting: 100,
             loaded: false,
             tests: 5,
-            avatar: null,
+            avatar: '',
             attrs: {
                 class: 'mb-6',
 
@@ -90,12 +94,28 @@ export default {
                 birthday: this.birthday,
                 phone: this.phone,
                 about: this.about,
-                }, 
-                {headers: {
-                Authorization: `Bearer ${this.token}`
-            }})
+                avatarlink: this.avatar
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.$store.state.jwt}`
+                }
+            })
             this.snackbar = true,
                 setTimeout(() => { this.snackbar = false }, 1000)
+        },
+        uploadImage() {
+            let img = document.getElementById('avatar-input').files[0]
+            let fd = new FormData()
+
+            fd.append('files',img)
+
+            axios.post(api.upload, fd, {
+            headers: {
+                Authorization: `Bearer ${this.$store.state.jwt}`
+            }})
+                .then(response => {
+                    this.avatar = api.http+response.data[0].formats.small.url
+                })
         }
     },
     created() {
@@ -111,22 +131,29 @@ export default {
         readyHandler(); // in case the component has been instantiated lately after loading
     },
     mounted() {
+        this.$store.commit('changeMenuDisabled', false);
+        this.$store.commit('changeCurrentMenu', 1)
+        this.$store.commit('changeTitle', 'Профиль');
+        this.$store.commit('changeColor', 'teal');
         axios.post(api.me, null, {
             headers: {
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${this.$store.state.jwt}`
             }
-        }).then(respone => {this.userdata = respone.data;
-        this.username=this.userdata.username;
-        this.city=this.userdata.city;
-        this.birthday=this.userdata.birthday;
-        this.mail=this.userdata.email;
-        this.phone=this.userdata.phone;
-        this.about=this.userdata.about;
-        this.raiting=this.userdata.raiting;
-        if (this.userdata.avatar != null){
-        this.avatar=this.userdata.avatar.formats.small.url;} else {this.avatar=null;}
-        }).catch(error => { console.log(error);
-            this.$router.push({ path: '/' }) })
+        }).then(respone => {
+            this.userdata = respone.data;
+            this.username = this.userdata.username;
+            this.city = this.userdata.city;
+            this.birthday = this.userdata.birthday;
+            this.mail = this.userdata.email;
+            this.phone = this.userdata.phone;
+            this.about = this.userdata.about;
+            this.raiting = this.userdata.raiting;
+            this.avatar = this.userdata.avatarlink;
+            
+        }).catch(error => {
+            console.log(error);
+            this.$router.push({ path: '/' })
+        })
     }
 
 }
@@ -136,6 +163,10 @@ export default {
 .v-skeleton-loader__paragraph,
 .v-skeleton-loader__sentences {
     padding: 16px
+}
+
+.v-avatar {
+    position: relative;
 }
 
 .profile-wrapper {
@@ -148,6 +179,24 @@ export default {
 .avatar-name {
     display: flex;
     align-items: flex-start;
+}
+
+.input-avatar .v-input__control {
+    display: none;
+}
+
+.input-avatar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    justify-content: center !important;
+    align-items: center;
+    padding-top: 10px !important;
+    margin-top: 0px !important;
+    position: absolute;
+    padding-left: 10px;
+    background: rgba(255, 255, 255, 0.712);
 }
 
 .username {
